@@ -1,0 +1,104 @@
+body {
+    background: url(https://raw.githubusercontent.com/partyzzzan/test/327d88b805e26f6b42caa9479172fa46a8d8be6e/entry-form-bg.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+div.potential, 
+div.investment,
+div.profit
+{
+    height: 96px;
+    margin: 20px 0px;
+    opacity: 0.5;
+    background-position: center!important;
+    background-size: contain!important;
+    background-repeat: no-repeat!important;
+}
+
+div.potential
+{
+    background: url(https://raw.githubusercontent.com/partyzzzan/test/327d88b805e26f6b42caa9479172fa46a8d8be6e/location_jobsite.png);
+}
+
+div.investment
+{
+    background: url(https://raw.githubusercontent.com/partyzzzan/test/327d88b805e26f6b42caa9479172fa46a8d8be6e/hilti_drill.png);
+}
+
+div.profit
+{
+    background: url(https://raw.githubusercontent.com/partyzzzan/test/327d88b805e26f6b42caa9479172fa46a8d8be6e/money.png);
+}
+
+.big-container.user-own-css .thebuttons .formdefaultbut {
+    float: right !important
+}
+
+.divonecolumn.second-column span,
+.divonecolumn.second-column .class123-label {
+    /* color: #DCDCDD; */
+    /* color: #E7E5E2; */
+    color: #FFFFFF!important;
+}
+
+input#id123-control1373637 {
+    max-width: none !important;
+}
+
+span#saving,
+span#invest,
+span#profit
+{
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+div.result-main-container
+{
+    height: 438px; 
+    display: flex; 
+    flex-direction: column;
+}
+
+div.description-container
+{
+    flex-grow: 1;
+    width: 70%;
+    text-align: right;
+    align-self: flex-end;
+    padding-right: 5%;
+}
+
+/* div.description-container span
+{
+    white-space: pre;
+} */
+
+div#result_div
+{
+    display: flex; 
+    flex-direction: row;
+}
+
+div.result-item-container
+{
+    flex: 1 1 0px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+div.result-content-container
+{
+    display: flex; 
+    flex-direction: column;
+    width: 100%;
+}
+
+div.res-mon-container
+{
+    text-align: center;
+}
