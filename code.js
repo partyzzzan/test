@@ -7,49 +7,60 @@ const ids = {
   workers_under_crane_id: '1361589'
 }
 
-currentVersion = 2;
+currentVersion = 3;
 applicationName = 'formWorks';
 
-const days_per_month = 30;
-const toolset_cost = 526000;
-const worker_daily_salary = 1500;
-const crane_monthly_rental_fee = 500000;
-const shack_number = 10;
-const shack_monthly_rental_fee = 6000;
-const other_daily_cost = 1000;
-const speedup = (1 - 0.9531);
+const FMIN = 1;
+const PMIN = 1;
+const CMIN = 1;
 
-const profit_text = 
-`Получите выгоду, показанную ниже, за счет 
+const WC = 2000;
+const CR = 700000;
+const CH = 6000;
+const QWH = 4;
+const CU = 100000;
+
+const SUK = 0.953;
+
+const TP1 = 160000;
+const TQ1 = 1
+
+const TP2 = 65000;
+const TQ2 = 1;
+
+const TP3 = 63000;
+const TQ3 = 1;
+
+const CP1 = 5;
+const CN1 = 16;
+
+const CP2 = 190;
+const CN2 = 0.006667
+
+const profit_text =
+  `Получите выгоду, показанную ниже, за счет 
 использования строительных технологий Хилти.
 Так же Вы сможете быстрее завершить работы на объекте,
 не увеличивая количество рабочих, и подписать акты 
 о стоимости и приемке выполненых работ (формы КС).
 А значит быстрее получить свои деньги.`;
 
-// `Начните использовать строительные технологии 
-// Хилти и без увеличения фонда оплаты труда 
-// Вы сможете сэкономить рассчитаную сумму. 
-// А также быстрее завершить работы на 
-// объекте и подписать акт о приемке выполненых работ (формы КС).
-// А значит быстрее получить свои деньги.`;
-
 const input_text = ``;
 
-const fail_text = 
-`На основании введенных данных Ваша компания
+const fail_text =
+  `На основании введенных данных Ваша компания
 работает достаточно эффективно. 
 Узнайте, какие улучшения строительных 
 процессов, которые мы предлагаем, 
 Вы пока не используете`;
 
 $(document).ready(function (e) {
-  if(tryToRecoverData())
+  if (tryToRecoverData())
     update_result()
   else
     reset_results();
 
-  
+
   for (const prop in ids) {
     if ($('#id123-control' + ids[prop]).length != 0)
       continue;
@@ -64,29 +75,73 @@ $(document).ready(function (e) {
   }
 });
 
-function tryToRecoverData()
-{
+function tryToRecoverData() {
   const version = localStorage.getItem('psaFormWorksV');
-  if(!(version && version == currentVersion))
+  if (!(version && version == currentVersion))
     return false;
 
   const prmString = localStorage.getItem('psaFormWorksParams');
-  if(!prmString)
+  if (!prmString)
     return false;
 
   const params = JSON.parse(prmString);
-  if(!params)
+  if (!params)
     return false;
 
   res = true;
   for (const prop in ids) {
     const value = params[prop.substring(0, prop.lastIndexOf("_id"))];
-    if(value)
+    if (value)
       $('#id123-control' + ids[prop]).val(value);
     else
       res = false;
   }
   return res;
+}
+
+function FCAL(params) {
+  return Math.max(FMIN, params.floor_number);
+}
+
+function PCAL(params) {
+  return Math.max(PMIN, params.workers_under_crane);
+}
+
+function CCAL(params) {
+  return Math.max(CMIN, params.crane_number);
+}
+
+function DC(params) {
+  const TWC = WC * PCAL(params) * CCAL(params);
+  const CRD = CR / 30 * CCAL(params);
+  const QH = PCAL(params) / QWH * CCAL(params);
+  const CHD = CH * QH + CU;
+  const HD = CHD / 30;
+  return TWC + CRD + HD;
+}
+
+function FFD(params) {
+  return params.days_per_floor * (1 - SUK);
+}
+
+function DFP(params) {
+  return FFD(params) * FCAL(params);
+}
+
+function HTC() {
+  return TP1 * TQ1 + TP2 * TQ2 + TP3 * TQ3;
+}
+
+function HTPC(params) {
+  return HTC() * CCAL(params);
+}
+
+function HCPC(params) {
+  return (CN1 * params.concrete_volume * CP1) + (CN2 * FCAL(params) * params.floor_area * CP2);
+}
+
+function HPC(params) {
+  return HTPC(params) + HCPC(params);
 }
 
 function update_result() {
@@ -101,18 +156,15 @@ function update_result() {
   localStorage.setItem('psaFormWorksDt', Date.now());
   localStorage.setItem('psaFormWorksV', currentVersion);
 
-  const workers_daily_cost = worker_daily_salary * params.workers_under_crane * params.crane_number;
-  const crane_daily_cost = crane_monthly_rental_fee / days_per_month;
-  const shack_daily_cost = shack_number * shack_monthly_rental_fee / days_per_month;
-  const total_site_daily_cost = workers_daily_cost + crane_daily_cost + shack_daily_cost + other_daily_cost;
-  const saved_days_per_floor = speedup * params.days_per_floor;
-  const total_saved_days = saved_days_per_floor * params.floor_number;
-
-  const saving = total_saved_days * total_site_daily_cost;
-  const invest = toolset_cost * params.crane_number;
+  const saving = DFP(params) * DC(params);
+  const invest = HPC(params);
   const profit = saving - invest;
 
-  localStorage.setItem('psaFormWorksResult', JSON.stringify({saving: saving, invest: invest, profit: profit}));
+  localStorage.setItem('psaFormWorksResult', JSON.stringify({
+    saving: saving,
+    invest: invest,
+    profit: profit
+  }));
 
   set_results(saving, invest, profit);
 }
@@ -147,20 +199,17 @@ function reset_results() {
 }
 
 function set_results(saving, invest, profit) {
-  if(profit > 0)
-  {
+  if (profit > 0) {
     $('#saving').text(Math.round(saving).toLocaleString('ru'));
     $('#invest').text(Math.round(invest).toLocaleString('ru'));
     $('#profit').text(Math.round(profit).toLocaleString('ru'));
 
     $('#profit-description-text').text(profit_text);
-  }
-  else
-  {
+  } else {
     $('#saving').text('—');
     $('#invest').text('—');
     $('#profit').text('—');
-  
+
     $('#profit-description-text').text(fail_text);
   }
 }
