@@ -182,7 +182,7 @@ function get_params() {
 
 function is_params_ready(params) {
   for (const prop in params) {
-    if (typeof params[prop] !== 'undefined') {
+    if (params[prop] !== undefined && !isNaN(params[prop])) {
       continue;
     }
     return false;
