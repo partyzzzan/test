@@ -182,7 +182,7 @@ function get_params() {
 
 function is_params_ready(params) {
   for (const prop in params) {
-    if (params[prop]) {
+    if (typeof params[prop] !== 'undefined') {
       continue;
     }
     return false;
