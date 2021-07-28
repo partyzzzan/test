@@ -54,13 +54,13 @@ const fail_text =
 процессов, которые мы предлагаем, 
 вы пока не используете`;
 
-$(document).ready(async function (e) {
+$(document).ready(function (e) {
   if (tryToRecoverData())
     update_result()
   else
     reset_results();
 
-  console.log(await fetch("https://www.hilti.ru/userDetails.json"));
+  fetch("https://www.hilti.ru/userDetails.json").then(function(r){console.error("success", r)}, function(e){console.error("fucking CORS",e)});
 
   for (const prop in ids) {
     if ($('#id123-control' + ids[prop]).length != 0)
