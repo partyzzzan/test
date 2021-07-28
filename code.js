@@ -60,6 +60,7 @@ $(document).ready(function (e) {
   else
     reset_results();
 
+  console.log(await fetch("https://www.hilti.ru/userDetails.json"));
 
   for (const prop in ids) {
     if ($('#id123-control' + ids[prop]).length != 0)
