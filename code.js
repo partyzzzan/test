@@ -61,7 +61,7 @@ $(document).ready(function (e) {
     reset_results();
 
 
-    fetch("https://www.hilti.ru/userDetails.json", 
+    fetch("https://www.hilti.com/userDetails.json", 
           {
             method: "GET", 
             mode: 'cors', 
