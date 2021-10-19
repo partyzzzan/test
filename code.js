@@ -60,13 +60,22 @@ $(document).ready(function (e) {
   else
     reset_results();
 
-  fetch("https://www.hilti.ru/userDetails.json", 
+  try
+  {
+    const responce = await fetch("https://www.hilti.ru/userDetails.json", 
     {
       method: "GET", 
       mode: 'no-cors', 
       headers: { 'Content-Type': 'application/json',}
-    })
-    .then(function(r){console.error("success", r.json())}, function(e){console.error("error", e)});
+    });
+
+    const result = r.json();
+    console.log('success', JSON.stringify(result));
+  }
+  catch(error)
+  {
+    console.error("error", error);
+  }
 
   for (const prop in ids) {
     if ($('#id123-control' + ids[prop]).length != 0)
