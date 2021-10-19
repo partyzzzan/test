@@ -65,7 +65,8 @@ $(document).ready(function (e) {
       method: "GET", 
       mode: 'no-cors', 
       headers: { 'Content-Type': 'application/json',}
-    }).then(function(r){console.error("success", r)}, function(e){console.error("error", e)});
+    })
+    .then(function(r){console.error("success", r.json())}, function(e){console.error("error", e)});
 
   for (const prop in ids) {
     if ($('#id123-control' + ids[prop]).length != 0)
