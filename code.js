@@ -54,7 +54,7 @@ const fail_text =
 процессов, которые мы предлагаем, 
 вы пока не используете`;
 
-$(document).ready(function (e) {
+$(document).ready(async function (e) {
   if (tryToRecoverData())
     update_result()
   else
