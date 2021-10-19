@@ -54,28 +54,22 @@ const fail_text =
 процессов, которые мы предлагаем, 
 вы пока не используете`;
 
-$(document).ready(async function (e) {
+$(document).ready(function (e) {
   if (tryToRecoverData())
     update_result()
   else
     reset_results();
 
-  try
-  {
-    const responce = await fetch("https://www.hilti.ru/userDetails.json", 
-    {
-      method: "GET", 
-      mode: 'no-cors', 
-      headers: { 'Content-Type': 'application/json',}
-    });
 
-    const result = r.json();
-    console.log('success', JSON.stringify(result));
-  }
-  catch(error)
-  {
-    console.error("error", error);
-  }
+    fetch("https://www.hilti.ru/userDetails.json", 
+          {
+            method: "GET", 
+            mode: 'no-cors', 
+            headers: { 'Content-Type': 'application/json',}
+          })
+      .then((r) => { return r.json(); })
+      .then((data) => { console.log('success', JSON.stringify(data)); })
+      .catch((error) => { console.error("error", error); });
 
   for (const prop in ids) {
     if ($('#id123-control' + ids[prop]).length != 0)
