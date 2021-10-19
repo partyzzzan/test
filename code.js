@@ -64,7 +64,6 @@ $(document).ready(function (e) {
     fetch("https://hilti.com/userDetails.json", 
           {
             method: "GET", 
-            mode: 'cors', 
             headers: { 'Content-Type': 'application/json',}
           })
       .then((r) => { return r.json(); })
