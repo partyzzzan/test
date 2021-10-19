@@ -60,7 +60,7 @@ $(document).ready(function (e) {
   else
     reset_results();
 
-  fetch("https://www.hilti.ru/userDetails.json").then(function(r){console.error("success", r)}, function(e){console.error("fucking CORS",e)});
+  fetch("https://www.hilti.ru/userDetails.json", { method: "GET", mode: 'cors', headers: { 'Content-Type': 'application/json',}}).then(function(r){console.error("success", r)}, function(e){console.error("fucking CORS",e)});
 
   for (const prop in ids) {
     if ($('#id123-control' + ids[prop]).length != 0)
